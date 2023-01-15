@@ -17,34 +17,37 @@ param (
     [switch]$Analyze
 )
 
-# Vars
+# Module variables
 $AliasesToExport = @('New-DiscordWebHookThumbnail')
 $Author = 'ExpendaBubble'
 $CompatiblePSEditions = @('Core','Desktop')
 $CmdletsToExport = @()
 $Description = 'A PowerShell module that makes it easy to send, edit and delete Discord messages via web hook.'
 $LicenseUri = 'https://github.com/ExpendaBubble/PSDiscordWebHook/blob/main/LICENSE'
-$ModuleVersion = '0.9.0.0'
+$ModuleVersion = '0.9.0'
 $Name = 'PSDiscordWebHook'
 $PowerShellVersion = '5.1'
 $ProjectUri = 'https://github.com/ExpendaBubble/PSDiscordWebHook'
-$Tags = @('Discord', 'Web Hook', 'Social Media', 'Messaging')
+$Tags = @('Discord', 'Hook', 'Messaging', 'REST', 'Web')
 $VariablesToExport = @()
 
+# Build variables
+$BuildDir = "$PSScriptRoot\build\$Name\$ModuleVersion"
+
 # Clean and create directory and files
-If (Test-Path -Path "$PSScriptRoot\build") {
-    Remove-Item -Path "$PSScriptRoot\build" -Recurse
+If (Test-Path -Path "$BuildDir") {
+    Remove-Item -Path "$BuildDir" -Recurse
 }
-New-Item -Path "$PSScriptRoot\build" -ItemType Directory | Out-Null
-New-Item -Path "$PSScriptRoot\build\$Name.psd1" -ItemType File | Out-Null
-New-Item -Path "$PSScriptRoot\build\$Name.psm1" -ItemType File | Out-Null
+New-Item -Path "$BuildDir" -ItemType Directory | Out-Null
+New-Item -Path "$BuildDir\$Name.psd1" -ItemType File | Out-Null
+New-Item -Path "$BuildDir\$Name.psm1" -ItemType File | Out-Null
 
 # Get functions and build module
 $public = @( Get-ChildItem -Path "$PSScriptRoot\Public\*.ps1" -ErrorAction SilentlyContinue )
 $private = @( Get-ChildItem -Path "$PSScriptRoot\Private\*.ps1" -ErrorAction SilentlyContinue )
 $functions = $public + $private | Sort-Object -Property Name
 $functions | ForEach-Object {
-    (Get-Content -Path $_.FullName -Raw) + '' | Out-File -FilePath "$PSScriptRoot\build\$Name.psm1" -Append
+    (Get-Content -Path $_.FullName -Raw) + '' | Out-File -FilePath "$BuildDir\$Name.psm1" -Append
 }
 
 # Build manifest
@@ -58,7 +61,7 @@ $manifest = @{
     Guid = (New-Guid)
     LicenseUri = $LicenseUri
     ModuleVersion = $ModuleVersion
-    Path = "$PSScriptRoot\build\$Name.psd1"
+    Path = "$BuildDir\$Name.psd1"
     PowerShellVersion = $PowerShellVersion
     ProjectUri = $ProjectUri
     RootModule = "$Name.psm1"
@@ -69,5 +72,5 @@ New-ModuleManifest @manifest
 
 # PS Script Analyzer
 if ($Analyze) {
-    Invoke-ScriptAnalyzer -Path "$PSScriptRoot\build" -Settings PSGallery
+    Invoke-ScriptAnalyzer -Path "$BuildDir" -Settings PSGallery
 }
