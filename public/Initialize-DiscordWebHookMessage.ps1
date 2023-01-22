@@ -1,9 +1,9 @@
 function Initialize-DiscordWebHookMessage {
     <#
     .SYNOPSIS
-        Constructs a message object to send to Discord via web hook.
+        Constructs a message object to send to Discord via webhook.
     .DESCRIPTION
-        Discord web hook message object. Must contain at least some content or one or more embeds.
+        Discord webhook message object. Must contain at least some content or one or more embeds.
     .PARAMETER AvatarUrl
         Url to avatar image for user.
     .PARAMETER Content
@@ -13,7 +13,7 @@ function Initialize-DiscordWebHookMessage {
     .PARAMETER TextToSpeech
         Enables text-to-speech for content.
     .PARAMETER UserName
-        User name to use for the message posted by the web hook.
+        User name to use for the message posted by the webhook.
     .EXAMPLE
         PS C:\> Initialize-DiscordWebHookMessage -Content 'Hello World!' -UserName 'Brian Kernighan'
 

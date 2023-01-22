@@ -2,7 +2,7 @@
 Module Name: PSDiscordWebHook
 Module Guid: 216bac5f-917a-4919-a15c-4090a165b388
 Download Help Link: https://github.com/ExpendaBubble/PSDiscordWebHook/docs/PSDiscordWebHook-help.xml
-Help Version: 0.9.0
+Help Version: 0.9.1
 Locale: en-US
 ---
 
@@ -10,7 +10,7 @@ Locale: en-US
 
 ## Description
 
-A PowerShell module that makes it easy to send, edit and delete Discord messages via web hook.
+A PowerShell module that makes it easy to send, edit and delete Discord messages via webhook.
 
 ## PSDiscordWebHook Cmdlets
 
@@ -40,7 +40,7 @@ Creates a Discord image object for use within an embed.
 
 ### [Initialize-DiscordWebHookMessage](Initialize-DiscordWebHookMessage.md)
 
-Discord web hook message object.
+Discord webhook message object.
 
 ### [Remove-DiscordWebHookMessage](Remove-DiscordWebHookMessage.md)
 
