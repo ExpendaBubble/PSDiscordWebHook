@@ -25,7 +25,7 @@ function ConvertFrom-Color {
     .LINK
         Initialize-DiscordWebHookEmbed
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Name')]
     [OutputType([System.Int64])]
     param (
         [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
