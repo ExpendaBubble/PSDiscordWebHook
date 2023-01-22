@@ -7,7 +7,7 @@ function ConvertTo-HexColor {
     .PARAMETER RBG
         Enter the Red Green Blue value comma separated. red: 51, green: 51 & blue: 204 for example needs to be entered as 51,51,204.
     .EXAMPLE
-        PS C:\> Convert-HexColor -RGB 123,200,255
+        PS C:\> Convert-HexColor -RGB 123, 200, 255
 
         Converts red = 123, green = 200 & blue = 255 to hex value 7bc8ff
     .INPUTS
@@ -19,25 +19,13 @@ function ConvertTo-HexColor {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]
-        [ValidatePattern('^([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])$')]
+        [Parameter(Mandatory = $true)]
+        [ValidateCount(3, 3)]
+        [ValidateRange(0, 255)]
         [int[]]$Rgb
     )
-
-    if ($null -eq $Rgb[2]) {
-        Write-Error 'Value missing. Please enter all three values seperated by comma.'
+    end {
+        $color = [System.Drawing.Color]::FromArgb($Rgb[0], $Rgb[1], $Rgb[2])
+        $color.R.ToString('X2') + $color.G.ToString('X2') + $color.B.ToString('X2')
     }
-    $red = [convert]::Tostring($Rgb[0], 16)
-    $green = [convert]::Tostring($Rgb[1], 16)
-    $blue = [convert]::Tostring($Rgb[2], 16)
-    if ($red.Length -eq 1) {
-        $red = '0' + $red
-    }
-    if ($green.Length -eq 1) {
-        $green = '0' + $green
-    }
-    if ($blue.Length -eq 1) {
-        $blue = '0' + $blue
-    }
-    return $red + $green + $blue
 }

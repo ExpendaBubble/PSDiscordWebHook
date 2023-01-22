@@ -9,7 +9,7 @@ function Initialize-DiscordWebHookField {
     .PARAMETER Value
         The content of the field.
     .PARAMETER Inline
-        Whether or not this field should be on the same line/row or not. Only works as preceeding or following field is also inline.
+        Whether or not this field should be on the same line/row or not. Only works if preceding or following field is also inline.
     .EXAMPLE
         PS C:\> Initialize-DiscordWebHookField -Name 'Note' -Value 'This is a field'
 
@@ -40,11 +40,13 @@ function Initialize-DiscordWebHookField {
 
         [switch]$Inline
     )
-    $ErrorActionPreference = 'Stop'
-    $field = [ordered] @{
-        name   = $Name
-        value  = $Value
-        inline = $inline.IsPresent
+    end {
+        $ErrorActionPreference = 'Stop'
+        $field = [ordered] @{
+            name   = $Name
+            value  = $Value
+            inline = $inline.IsPresent
+        }
+        $field
     }
-    return $field
 }

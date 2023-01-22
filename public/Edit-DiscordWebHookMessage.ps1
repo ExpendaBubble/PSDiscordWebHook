@@ -38,13 +38,13 @@ function Edit-DiscordWebHookMessage {
     )
     begin {
         $ErrorActionPreference = 'Stop'
-        $WebHookUrl = $Url + '/messages/' + $Id
+        $webHookUrl = $Url + '/messages/' + $Id
     }
     process {
         $json = $Body | ConvertTo-Json
-        if ($PSCmdlet.ShouldProcess("$([System.Environment]::NewLine)$Body",'PATCH')) {
-            $request = Invoke-RestMethod -Uri $WebHookUrl -Body $json -Method Patch -ContentType 'application/json; charset=UTF-8'
-            return $request
+        if ($PSCmdlet.ShouldProcess("$([System.Environment]::NewLine)$Body", 'PATCH')) {
+            $request = Invoke-RestMethod -Uri $webHookUrl -Body [System.Text.Encoding]::UTF8.GetBytes($json) -Method Patch -ContentType 'application/json; charset=UTF-8'
+            $request
         }
     }
 }

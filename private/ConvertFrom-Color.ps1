@@ -28,23 +28,25 @@ function ConvertFrom-Color {
     [CmdletBinding()]
     [OutputType([System.Int64])]
     param (
-        [Parameter(Mandatory=$true,ParameterSetName = 'Name',Position = 0)]
-        [ValidateScript({$_ -in $colors.Keys})]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
+        [ValidateScript({ $_ -in $script:colors.Keys })]
         [string]$Name,
 
-        [Parameter(Mandatory=$true,ParameterSetName = 'Hex',Position = 0)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Hex')]
         [ValidatePattern('^#?([A-Fa-f0-9]{6})$')]
         [string]$Hex
     )
     switch ($PsCmdlet.ParameterSetName) {
         'Name' {
-            $value = $colors.$Name
-            $HexValue = ConvertTo-HexColor -RGB $value
-            return [Convert]::ToInt64($HexValue,16)
+            $value = $script:colors.$Name
+            $hexValue = ConvertTo-HexColor -Rgb $value
+            [Convert]::ToInt64($hexValue, 16)
+            break
         }
         'Hex' {
-            $HexValue = $Hex.TrimStart('#')
-            return [Convert]::ToInt64($HexValue,16)
+            $hexValue = $Hex.TrimStart('#')
+            [Convert]::ToInt64($hexValue, 16)
+            break
         }
     }
 }

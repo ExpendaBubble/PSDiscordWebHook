@@ -31,13 +31,13 @@ function Remove-DiscordWebHookMessage {
     )
     begin {
         $ErrorActionPreference = 'Stop'
-        $WebHookUrl = $Url + '/messages/'
+        $webHookUrl = $Url + '/messages/'
     }
     process {
-        $WebHookUrl = $WebHookUrl + $Id
-        if ($PSCmdlet.ShouldProcess($Id,'DELETE')) {
-            $request = Invoke-RestMethod -Uri $WebHookUrl -Method Delete
-            return $request
+        $restUri = $webHookUrl + $Id
+        if ($PSCmdlet.ShouldProcess($Id, 'DELETE')) {
+            $request = Invoke-RestMethod -Uri $restUri -Method Delete
+            $request
         }
     }
 }

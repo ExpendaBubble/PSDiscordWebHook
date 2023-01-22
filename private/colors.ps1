@@ -1,5 +1,5 @@
 # List of colors and their RGB values for use in a Discord message embed
-$colors = [ordered] @{
+$script:colors = [ordered] @{
     None                   = $null
     AirForceBlue           = 93, 138, 168
     Akaroa                 = 195, 176, 145
@@ -753,12 +753,12 @@ $colors = [ordered] @{
 }
 
 # Create auto completer for ColorName parameter in Initialize-DiscordWebHookEmbed function
-$ScriptBlockColors = {
+$scriptblockColors = {
     param(
         $CommandName, $ParameterName, $WordToComplete, $CommandAst, $FakeBoundParameters
     )
-    $colors.Keys | Where-Object {
+    $script:colors.Keys | Where-Object {
         $_ -like "*$WordToComplete*"
     }
 }
-Register-ArgumentCompleter -CommandName Initialize-DiscordWebHookEmbed -ParameterName ColorName -ScriptBlock $ScriptBlockColors
+Register-ArgumentCompleter -CommandName Initialize-DiscordWebHookEmbed -ParameterName ColorName -ScriptBlock $scriptblockColors

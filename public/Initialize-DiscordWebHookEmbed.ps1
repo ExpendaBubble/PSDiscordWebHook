@@ -45,20 +45,20 @@ function Initialize-DiscordWebHookEmbed {
     .LINK
         Initialize-DiscordWebHookMessage
     #>
-    [CmdletBinding(DefaultParameterSetName='Default')]
+    [CmdletBinding(DefaultParameterSetName = 'Default')]
     [OutputType([System.Collections.Specialized.OrderedDictionary])]
     param (
-        [Parameter(Mandatory = $false,ParameterSetName = 'Default')]
-        [Parameter(Mandatory = $false,ParameterSetName = 'ColorName')]
-        [Parameter(Mandatory = $false,ParameterSetName = 'ColorHex')]
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ColorName')]
+        [Parameter(ParameterSetName = 'ColorHex')]
         [ValidateNotNullOrEmpty()]
         [System.Collections.IDictionary]$Author,
 
-        [Parameter(Mandatory = $false,ParameterSetName = 'ColorName')]
-        [ValidateScript({$_ -in $colors.Keys})]
+        [Parameter(ParameterSetName = 'ColorName')]
+        [ValidateScript({ $_ -in $script:colors.Keys })]
         [string]$ColorName,
 
-        [Parameter(Mandatory = $false,ParameterSetName = 'ColorHex')]
+        [Parameter(ParameterSetName = 'ColorHex')]
         [ValidatePattern('^#?([A-Fa-f0-9]{6})$')]
         [string]$ColorHex,
 
@@ -68,27 +68,27 @@ function Initialize-DiscordWebHookEmbed {
         [ValidateNotNullOrEmpty()]
         [string]$Description,
 
-        [Parameter(Mandatory = $false,ParameterSetName = 'Default')]
-        [Parameter(Mandatory = $false,ParameterSetName = 'ColorName')]
-        [Parameter(Mandatory = $false,ParameterSetName = 'ColorHex')]
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ColorName')]
+        [Parameter(ParameterSetName = 'ColorHex')]
         [ValidateNotNullOrEmpty()]
         [System.Collections.IDictionary[]]$Fields,
 
-        [Parameter(Mandatory = $false,ParameterSetName = 'Default')]
-        [Parameter(Mandatory = $false,ParameterSetName = 'ColorName')]
-        [Parameter(Mandatory = $false,ParameterSetName = 'ColorHex')]
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ColorName')]
+        [Parameter(ParameterSetName = 'ColorHex')]
         [ValidateNotNullOrEmpty()]
         [System.Collections.IDictionary]$Footer,
 
-        [Parameter(Mandatory = $false,ParameterSetName = 'Default')]
-        [Parameter(Mandatory = $false,ParameterSetName = 'ColorName')]
-        [Parameter(Mandatory = $false,ParameterSetName = 'ColorHex')]
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ColorName')]
+        [Parameter(ParameterSetName = 'ColorHex')]
         [ValidateNotNullOrEmpty()]
         [System.Collections.IDictionary]$Image,
 
-        [Parameter(Mandatory = $false,ParameterSetName = 'Default')]
-        [Parameter(Mandatory = $false,ParameterSetName = 'ColorName')]
-        [Parameter(Mandatory = $false,ParameterSetName = 'ColorHex')]
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ColorName')]
+        [Parameter(ParameterSetName = 'ColorHex')]
         [ValidateNotNullOrEmpty()]
         [System.Collections.IDictionary]$Thumbnail,
 
@@ -98,35 +98,37 @@ function Initialize-DiscordWebHookEmbed {
         [ValidateNotNullOrEmpty()]
         [string]$Title
     )
-    $ErrorActionPreference = 'Stop'
-    $embed = [ordered] @{
-        title       = $Title
-        description = $Description
-        fields      = @()
-    }
-    $Field = foreach ($Fld in $Fields) {
-        if ($null -ne $Fld) {
-            $Fld
+    end {
+        $ErrorActionPreference = 'Stop'
+        $embed = [ordered] @{
+            title       = $Title
+            description = $Description
+            fields      = @()
         }
+        $field = foreach ($Fld in $Fields) {
+            if ($null -ne $Fld) {
+                $Fld
+            }
+        }
+        $embed.fields = @($field)
+        if ($ColorName) {
+            $embed.color = ConvertFrom-Color -Name $ColorName
+        }
+        if ($Footer) {
+            $embed.footer = $Footer
+        }
+        if ($ColorHex) {
+            $embed.color = ConvertFrom-Color -Hex $ColorHex
+        }
+        if ($Author) {
+            $embed.author = $Author
+        }
+        if ($Image) {
+            $embed.image = $Image
+        }
+        if ($Thumbnail) {
+            $embed.thumbnail = $Thumbnail
+        }
+        $embed
     }
-    $embed.fields = @($Field)
-    if ($ColorName) {
-        $embed.color = ConvertFrom-Color -Name $ColorName
-    }
-    if ($Footer) {
-        $embed.footer = $Footer
-    }
-    if ($ColorHex) {
-        $embed.color = ConvertFrom-Color -Hex $ColorHex
-    }
-    if ($Author) {
-        $embed.author = $Author
-    }
-    if ($Image) {
-        $embed.image = $Image
-    }
-    if ($Thumbnail) {
-        $embed.thumbnail = $Thumbnail
-    }
-    return $embed
 }
