@@ -31,28 +31,28 @@ function Initialize-DiscordWebHookMessage {
     .LINK
         Send-DiscordWebHookMessage
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Embeds')]
     [OutputType([System.Collections.Specialized.OrderedDictionary])]
     param (
-        [ValidatePattern('^https://|http://')]
-        [string]$AvatarUrl,
-
+        [Parameter(Mandatory = $true, ParameterSetName = 'Content')]
         [ValidateNotNullOrEmpty()]
         [string]$Content,
 
+        [Parameter(Mandatory = $true, ParameterSetName = 'Embeds')]
         [ValidateNotNullOrEmpty()]
         [System.Collections.IDictionary[]]$Embeds,
 
+        [ValidatePattern('^https://|http://')]
+        [string]$AvatarUrl,
+
+        [Parameter(ParameterSetName = 'Content')]
         [switch]$TextToSpeech,
 
         [ValidateNotNullOrEmpty()]
         [string]$UserName
     )
-    $ErrorActionPreference = 'Stop'
-    if ($TextToSpeech -and !$Content) {
-        Write-Error -Message 'Cannot use text-to-speech without content.'
-    }
-    if ($Content -or $Embeds) {
+    end {
+        $ErrorActionPreference = 'Stop'
         $message = [ordered] @{
             embeds = @()
         }
@@ -74,8 +74,5 @@ function Initialize-DiscordWebHookMessage {
             $message.avatar_url = $AvatarUrl
         }
         $message
-    }
-    else {
-        Write-Error -Message 'When constructing a message, you must provide a value for at least content or embeds.'
     }
 }
