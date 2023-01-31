@@ -8,21 +8,24 @@ schema: 2.0.0
 # Initialize-DiscordWebHookFooter
 
 ## SYNOPSIS
+
 Creates a new Discord footer object.
 
 ## SYNTAX
 
-```
+```powershell
 Initialize-DiscordWebHookFooter [-Text] <String> [[-IconUrl] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Discord footer object is added to and displayed at the bottom of an embed.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```powershell
 Initialize-DiscordWebHookFooter -Text 'That's all folks!' -IconUrl 'https://upload.wikimedia.org/wikipedia/en/7/79/Bugsbunny2011.png'
 ```
 
@@ -31,6 +34,7 @@ Creates a Discord footer object with text and an icon.
 ## PARAMETERS
 
 ### -Text
+
 The footer text.
 
 ```yaml
@@ -46,6 +50,7 @@ Accept wildcard characters: False
 ```
 
 ### -IconUrl
+
 A very tiny (24px x 24px) icon displayed left of the footer.
 
 ```yaml
@@ -61,17 +66,19 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### System.String
+
 ## OUTPUTS
 
 ### System.Collections.Specialized.OrderedDictionary
+
 ## NOTES
 
 ## RELATED LINKS
 
-[Initialize-DiscordWebHookEmbed]()
-
+[Initialize-DiscordWebHookEmbed](Initialize-DiscordWebHookEmbed.md)

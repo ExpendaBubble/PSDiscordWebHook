@@ -1,7 +1,7 @@
 ---
 Module Name: PSDiscordWebHook
-Module Guid: 216bac5f-917a-4919-a15c-4090a165b388
-Download Help Link: https://github.com/ExpendaBubble/PSDiscordWebHook/docs/PSDiscordWebHook-help.xml
+Module Guid: 52f4eb5a-5d23-412e-842c-14e4f71e32f7
+Download Help Link: https://raw.githubusercontent.com/ExpendaBubble/PSDiscordWebHook/main/cab/
 Help Version: 0.9.1
 Locale: en-US
 ---

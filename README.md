@@ -32,11 +32,28 @@ A PowerShell module that makes it easy to send, edit and delete Discord messages
 
 ## Setup
 
-In order to run this project on your own you will need ...
+You will need a Discord webhook URL in order to use this module. You can only create webhooks for Discord servers that you own, and each channel you want to send to requires its own webhook. For more information on how to create a Discord webhook, see [Intro to Webhooks - Discord](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks).
 
 ## Usage
 
 ```powershell
 Import-Module PSDiscordWebHook
-...
+
+$uri = 'https://discord.com/api/webhooks/xxxxxxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+$field1Name = 'Field 1'
+$field1Text = 'This is a field.'
+
+$field2Name = 'Field 2'
+$field2Text = 'This is another field.'
+
+$field1 = Initialize-DiscordWebHookField -Name $field1Name -Value $field1Text -Inline
+$field2 = Initialize-DiscordWebHookField -Name $field2Name -Value $field2Text -Inline
+$footer = Initialize-DiscordWebHookFooter -Text 'This is a footer.'
+$embed = Initialize-DiscordWebHookEmbed -Title 'This is a title' -Description 'This is a description.' -Fields $field1,$field2 -Footer $footer -ColorName 'Orange'
+$msg = Initialize-DiscordWebHookMessage -Embeds $embed -Content '@everyone'
+
+$post = Send-DiscordWebHookMessage -Body $msg -Url $uri
 ```
+
+![Example 01](img/example01.png)

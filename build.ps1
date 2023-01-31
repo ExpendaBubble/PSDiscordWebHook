@@ -14,8 +14,9 @@
 #>
 [CmdletBinding(SupportsShouldProcess = $true)]
 param (
-    [string]$Guid,
-    [switch]$Analyze
+    [string]$Guid = '52f4eb5a-5d23-412e-842c-14e4f71e32f7',
+    [switch]$Analyze,
+    [switch]$Update
 )
 
 # Module variables
@@ -37,7 +38,7 @@ if ([string]::IsNullOrWhiteSpace($Guid)) {
 
 # Build manifest parameters
 $manifest = @{
-    AliasesToExport      = 'New-DiscordWebHookThumbnail'
+    AliasesToExport      = 'Initialize-DiscordWebHookThumbnail'
     Author               = $author
     CmdletsToExport      = @()
     CompanyName          = $author
@@ -50,7 +51,7 @@ $manifest = @{
     Path                 = $manifestPath
     PowerShellVersion    = '5.1'
     ProjectUri           = $projectUri
-    Tags                 = 'Discord', 'Hook', 'Messaging', 'REST', 'Web'
+    Tags                 = 'Discord', 'Webhook', 'Messaging', 'REST'
     VariablesToExport    = @()
 }
 
@@ -71,15 +72,16 @@ $functions | ForEach-Object {
 # Build manifest
 New-ModuleManifest @manifest -RootModule "$name.psm1" -FunctionsToExport $public.BaseName
 
-# Create the docs - one time only
-# New-MarkdownHelp -Module $name -OutputFolder $docsFolder -UseFullTypeName -WithModulePage -HelpVersion $moduleVersion -FwLink ("$projectUri/$docsFolder/$name-help.xml") -Force
+Import-Module -Name $manifestPath
+If (!$Update) {
+    # Create the docs
+    New-MarkdownHelp -Module $name -OutputFolder $docsFolder -UseFullTypeName -WithModulePage -HelpVersion $moduleVersion -FwLink "https://raw.githubusercontent.com/$author/$name/main/$cabFolder/" -Force
+}
 
 # Update docs
-Import-Module -Name $manifestPath
-Update-MarkdownHelp -Path $docsFolder -UseFullTypeName
-New-ExternalHelp -Path $docsFolder -OutputPath $buildDir -Force | Out-Null
-New-ExternalHelpCab -CabFilesFolder $buildDir -OutputFolder $cabFolder -LandingPagePath "$docsFolder\PSDiscordWebHook.md" | Out-Null
-
+Update-MarkdownHelp -Path $PSScriptRoot\$docsFolder -UseFullTypeName
+New-ExternalHelp -Path $PSScriptRoot\$docsFolder -OutputPath $buildDir\en-US -Force
+New-ExternalHelpCab -CabFilesFolder $buildDir\en-US -OutputFolder $cabFolder -LandingPagePath $docsFolder\PSDiscordWebHook.md
 
 # PS Script Analyzer
 if ($Analyze) {

@@ -8,21 +8,24 @@ schema: 2.0.0
 # Send-DiscordWebHookMessage
 
 ## SYNOPSIS
+
 Send a Discord message.
 
 ## SYNTAX
 
-```
+```powershell
 Send-DiscordWebHookMessage [-Body] <IDictionary> [-Url] <String> [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Sends a Discord message by webhook.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```powershell
 Send-DiscordWebHookMessage -Body $body -Url https://discord.com/api/webhooks/0987654321098765432/dFg_5g54KgjP42ger-KL7-rGJk45jpSDvm1WDCXBnKdzHAerBCidpvKWFNDS721KfALV
 ```
 
@@ -31,6 +34,7 @@ Sends Discord message.
 ## PARAMETERS
 
 ### -Body
+
 Body to send.
 
 ```yaml
@@ -46,6 +50,7 @@ Accept wildcard characters: False
 ```
 
 ### -Url
+
 Webhook url.
 
 ```yaml
@@ -61,6 +66,7 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
+
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
@@ -77,6 +83,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -92,19 +99,21 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### System.Collections.IDictionary for the body and System.String for the url.
+### System.Collections.IDictionary for the body and System.String for the url
+
 ## OUTPUTS
 
 ### System.Management.Automation.PSCustomObject
+
 ## NOTES
 
 ## RELATED LINKS
 
-[Initialize-DiscordWebHookMessage]()
+[Initialize-DiscordWebHookMessage](Initialize-DiscordWebHookMessage.md)
 
-[Remove-DiscordWebHookMessage]()
-
+[Remove-DiscordWebHookMessage](Remove-DiscordWebHookMessage.md)

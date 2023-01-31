@@ -12,7 +12,7 @@ function Initialize-DiscordWebHookImage {
 
         Creates a Discord picture image object for use within an embed.
     .EXAMPLE
-        PS C:\> New-DiscordWebHookThumbnail -Url 'https://upload.wikimedia.org/wikipedia/commons/2/20/Tom_%C3%A9s_Jerry.png'
+        PS C:\> Initialize-DiscordWebHookThumbnail -Url 'https://upload.wikimedia.org/wikipedia/commons/2/20/Tom_%C3%A9s_Jerry.png'
 
         Creates a Discord thumbnail image object for use within an embed.
     .INPUTS
@@ -22,7 +22,7 @@ function Initialize-DiscordWebHookImage {
     .LINK
         Initialize-DiscordWebHookEmbed
     #>
-    [Alias('New-DiscordWebHookThumbnail')]
+    [Alias('Initialize-DiscordWebHookThumbnail')]
     [CmdletBinding()]
     [OutputType([System.Collections.Specialized.OrderedDictionary])]
     param (
