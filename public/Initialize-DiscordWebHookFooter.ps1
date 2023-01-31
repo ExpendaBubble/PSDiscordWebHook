@@ -25,14 +25,15 @@ function Initialize-DiscordWebHookFooter {
         [Parameter(Mandatory = $true)]
         [string]$Text,
 
-        [Parameter(Mandatory = $false)]
         [ValidatePattern('^https://|http://')]
         [string]$IconUrl
     )
-    $ErrorActionPreference = 'Stop'
-    $author = [ordered] @{
-        text           = $Text
-        icon_url       = $IconUrl
+    end {
+        $ErrorActionPreference = 'Stop'
+        $author = [ordered] @{
+            text     = $Text
+            icon_url = $IconUrl
+        }
+        $author
     }
-    return $author
 }

@@ -30,9 +30,11 @@ function Initialize-DiscordWebHookImage {
         [ValidatePattern('^https://|http://')]
         [string]$Url
     )
-    $ErrorActionPreference = 'Stop'
-    $image = [ordered] @{
-        url       = $Url
+    end {
+        $ErrorActionPreference = 'Stop'
+        $image = [ordered] @{
+            url = $Url
+        }
+        $image
     }
-    return $image
 }

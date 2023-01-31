@@ -27,19 +27,19 @@ function Initialize-DiscordWebHookAuthor {
         [Parameter(Mandatory = $true)]
         [string]$Name,
 
-        [Parameter(Mandatory = $false)]
         [ValidatePattern('^https://|http://')]
         [string]$Url,
 
-        [Parameter(Mandatory = $false)]
         [ValidatePattern('^https://|http://')]
         [string]$IconUrl
     )
-    $ErrorActionPreference = 'Stop'
-    $author = [ordered] @{
-        name           = $Name
-        url            = $Url
-        icon_url       = $IconUrl
+    end {
+        $ErrorActionPreference = 'Stop'
+        $author = [ordered] @{
+            name     = $Name
+            url      = $Url
+            icon_url = $IconUrl
+        }
+        $author
     }
-    return $author
 }

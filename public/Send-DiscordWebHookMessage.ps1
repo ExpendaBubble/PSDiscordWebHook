@@ -32,16 +32,16 @@ function Send-DiscordWebHookMessage {
     )
     begin {
         $ErrorActionPreference = 'Stop'
-        $WebHookUrl = $Url + '?wait=true'
+        $webHookUrl = $Url + '?wait=true'
     }
     process {
         if ($null -eq $Body.content -and $null -eq $Body.embeds) {
-            throw 'When sending a message, you must provide a value for at least content or embeds'
+            Write-Error -Message 'When sending a message, you must provide a value for at least content or embeds'
         }
         $json = $Body | ConvertTo-Json -Depth 6
         if ($PSCmdlet.ShouldProcess("$([System.Environment]::NewLine)$Body", 'POST')) {
-            $request = Invoke-RestMethod -Uri $WebHookUrl -Body $json -Method Post -ContentType 'application/json; charset=UTF-8'
-            return $request
+            $request = Invoke-RestMethod -Uri $webHookUrl -Body [System.Text.Encoding]::UTF8.GetBytes($json) -Method Post -ContentType 'application/json; charset=UTF-8'
+            $request
         }
     }
 }

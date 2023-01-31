@@ -1,9 +1,9 @@
 function Initialize-DiscordWebHookMessage {
     <#
     .SYNOPSIS
-        Constructs a message object to send to Discord via web hook.
+        Constructs a message object to send to Discord via webhook.
     .DESCRIPTION
-        Discord web hook message object. Must contain at least some content or one or more embeds.
+        Discord webhook message object. Must contain at least some content or one or more embeds.
     .PARAMETER AvatarUrl
         Url to avatar image for user.
     .PARAMETER Content
@@ -13,7 +13,7 @@ function Initialize-DiscordWebHookMessage {
     .PARAMETER TextToSpeech
         Enables text-to-speech for content.
     .PARAMETER UserName
-        User name to use for the message posted by the web hook.
+        User name to use for the message posted by the webhook.
     .EXAMPLE
         PS C:\> Initialize-DiscordWebHookMessage -Content 'Hello World!' -UserName 'Brian Kernighan'
 
@@ -31,32 +31,30 @@ function Initialize-DiscordWebHookMessage {
     .LINK
         Send-DiscordWebHookMessage
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Embeds')]
     [OutputType([System.Collections.Specialized.OrderedDictionary])]
     param (
-        [Parameter(Mandatory = $false)]
-        [ValidatePattern('^https://|http://')]
-        [string]$AvatarUrl,
-
+        [Parameter(Mandatory = $true, ParameterSetName = 'Content')]
         [ValidateNotNullOrEmpty()]
         [string]$Content,
 
+        [Parameter(Mandatory = $true, ParameterSetName = 'Embeds')]
         [ValidateNotNullOrEmpty()]
         [System.Collections.IDictionary[]]$Embeds,
 
+        [ValidatePattern('^https://|http://')]
+        [string]$AvatarUrl,
+
+        [Parameter(ParameterSetName = 'Content')]
         [switch]$TextToSpeech,
 
-        [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string]$UserName
     )
-    $ErrorActionPreference = 'Stop'
-    if ($TextToSpeech -and (-not($Content))) {
-        throw 'Cannot use text-to-speech without content.'
-    }
-    if ($Content -or $Embeds) {
+    end {
+        $ErrorActionPreference = 'Stop'
         $message = [ordered] @{
-            "embeds" = @()
+            embeds = @()
         }
         if ($Embeds) {
             foreach ($embed in $Embeds) {
@@ -75,9 +73,6 @@ function Initialize-DiscordWebHookMessage {
         if ($AvatarUrl) {
             $message.avatar_url = $AvatarUrl
         }
-        return $message
-    }
-    else {
-        throw 'When constructing a message, you must provide a value for at least content or embeds'
+        $message
     }
 }

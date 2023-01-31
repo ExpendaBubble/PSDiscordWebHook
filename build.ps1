@@ -1,3 +1,4 @@
+#Requires -Modules PlatyPS
 <#
     .SYNOPSIS
         Build and optionally analyze module.
@@ -11,66 +12,76 @@
 
         Creates module files and returns PSScriptAnalyzer results.
 #>
-[CmdletBinding(SupportsShouldProcess)]
+[CmdletBinding(SupportsShouldProcess = $true)]
 param (
-    [Parameter(Mandatory = $false)]
+    [string]$Guid,
     [switch]$Analyze
 )
 
 # Module variables
-$AliasesToExport = @('New-DiscordWebHookThumbnail')
-$Author = 'ExpendaBubble'
-$CompatiblePSEditions = @('Core','Desktop')
-$CmdletsToExport = @()
-$Description = 'A PowerShell module that makes it easy to send, edit and delete Discord messages via web hook.'
-$LicenseUri = 'https://github.com/ExpendaBubble/PSDiscordWebHook/blob/main/LICENSE'
-$ModuleVersion = '0.9.0'
-$Name = 'PSDiscordWebHook'
-$PowerShellVersion = '5.1'
-$ProjectUri = 'https://github.com/ExpendaBubble/PSDiscordWebHook'
-$Tags = @('Discord', 'Hook', 'Messaging', 'REST', 'Web')
-$VariablesToExport = @()
+$moduleVersion = '0.9.1'
+$name = 'PSDiscordWebHook'
+$author = 'ExpendaBubble'
 
 # Build variables
-$BuildDir = "$PSScriptRoot\build\$Name\$ModuleVersion"
+$buildDir = "$PSScriptRoot\build\$name\$moduleVersion"
+$manifestPath = "$buildDir\$name.psd1"
+$rootModulePath = "$buildDir\$name.psm1"
+$projectUri = "https://github.com/$author/$name"
+$docsFolder = 'docs'
+$cabFolder = 'cab'
+
+if ([string]::IsNullOrWhiteSpace($Guid)) {
+    $Guid = New-Guid
+}
+
+# Build manifest parameters
+$manifest = @{
+    AliasesToExport      = 'New-DiscordWebHookThumbnail'
+    Author               = $author
+    CmdletsToExport      = @()
+    CompanyName          = $author
+    CompatiblePSEditions = 'Core', 'Desktop'
+    Description          = 'A PowerShell module that makes it easy to send, edit and delete Discord messages via webhook.'
+    Guid                 = $Guid
+    HelpInfoUri          = "https://raw.githubusercontent.com/$author/$name/main/$cabFolder/"
+    LicenseUri           = "$projectUri/blob/main/LICENSE"
+    ModuleVersion        = $moduleVersion
+    Path                 = $manifestPath
+    PowerShellVersion    = '5.1'
+    ProjectUri           = $projectUri
+    Tags                 = 'Discord', 'Hook', 'Messaging', 'REST', 'Web'
+    VariablesToExport    = @()
+}
 
 # Clean and create directory and files
-If (Test-Path -Path "$BuildDir") {
-    Remove-Item -Path "$BuildDir" -Recurse
+if (Test-Path -Path $buildDir) {
+    Remove-Item -Path $buildDir -Recurse
 }
-New-Item -Path "$BuildDir" -ItemType Directory | Out-Null
-New-Item -Path "$BuildDir\$Name.psd1" -ItemType File | Out-Null
-New-Item -Path "$BuildDir\$Name.psm1" -ItemType File | Out-Null
+New-Item -Path $buildDir -ItemType Directory | Out-Null
 
 # Get functions and build module
-$public = @( Get-ChildItem -Path "$PSScriptRoot\Public\*.ps1" -ErrorAction SilentlyContinue )
-$private = @( Get-ChildItem -Path "$PSScriptRoot\Private\*.ps1" -ErrorAction SilentlyContinue )
+[array] $public = Get-ChildItem -Path "$PSScriptRoot\Public\*.ps1"
+[array] $private = Get-ChildItem -Path "$PSScriptRoot\Private\*.ps1"
 $functions = $public + $private | Sort-Object -Property Name
 $functions | ForEach-Object {
-    (Get-Content -Path $_.FullName -Raw) + '' | Out-File -FilePath "$BuildDir\$Name.psm1" -Append
+    Get-Content -Path $_.FullName -Raw | Out-File -FilePath $rootModulePath -Append
 }
 
 # Build manifest
-$manifest = @{
-    AliasesToExport = $AliasesToExport
-    Author = $Author
-    CmdletsToExport = $CmdletsToExport
-    CompatiblePSEditions = $CompatiblePSEditions
-    Description = $Description
-    FunctionsToExport = @($public.BaseName)
-    Guid = (New-Guid)
-    LicenseUri = $LicenseUri
-    ModuleVersion = $ModuleVersion
-    Path = "$BuildDir\$Name.psd1"
-    PowerShellVersion = $PowerShellVersion
-    ProjectUri = $ProjectUri
-    RootModule = "$Name.psm1"
-    Tags = $Tags
-    VariablesToExport = $VariablesToExport
-}
-New-ModuleManifest @manifest
+New-ModuleManifest @manifest -RootModule "$name.psm1" -FunctionsToExport $public.BaseName
+
+# Create the docs - one time only
+# New-MarkdownHelp -Module $name -OutputFolder $docsFolder -UseFullTypeName -WithModulePage -HelpVersion $moduleVersion -FwLink ("$projectUri/$docsFolder/$name-help.xml") -Force
+
+# Update docs
+Import-Module -Name $manifestPath
+Update-MarkdownHelp -Path $docsFolder -UseFullTypeName
+New-ExternalHelp -Path $docsFolder -OutputPath $buildDir -Force | Out-Null
+New-ExternalHelpCab -CabFilesFolder $buildDir -OutputFolder $cabFolder -LandingPagePath "$docsFolder\PSDiscordWebHook.md" | Out-Null
+
 
 # PS Script Analyzer
 if ($Analyze) {
-    Invoke-ScriptAnalyzer -Path "$BuildDir" -Settings PSGallery
+    Invoke-ScriptAnalyzer -Path $buildDir -Settings PSGallery
 }
